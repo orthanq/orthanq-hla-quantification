@@ -53,7 +53,6 @@ rule preprocess:
         "../envs/orthanq.yaml"
     params:
         bwa_idx_prefix=lambda wc, input: os.path.splitext(input.bwa_index[0])[0],
-        output_folder=subpath(output.bcf, parent=True),
         input_params=get_orthanq_input_params,
     threads: config["threads"]
     benchmark:
