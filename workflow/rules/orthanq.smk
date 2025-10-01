@@ -42,6 +42,7 @@ rule preprocess:
         candidate_variants="results/orthanq/candidate_variants/{hla}.vcf",
         genome=genome,
         genome_fai=genome_fai,
+        pangenome_orig="results/preparation/hprc-v1.0-mc-grch38.xg",
         pangenome="results/preparation/linked_graphs/{sample}_{hla}/hprc-v1.0-mc-grch38.xg",
         orthanq_input=get_orthanq_input,
     output:
@@ -82,7 +83,8 @@ rule quantify:
     params:
         prior=config["orthanq_prior"],
     resources:
-        mem_mb=5000,
+        mem_mb=lambda wildcards, attempt: 8000 * (2 ** (attempt - 1)),
+    retries: 3
     benchmark:
         "benchmarks/orthanq_quantify/{sample}_{hla}.tsv"
     shell:
